@@ -1,5 +1,5 @@
 import { fetchAuthInfo } from '../../api/authService';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -29,7 +29,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <a>Magic Stream</a>
+                <Link to='/'>Magic Stream</Link>
             </div>
             <div className="navbar-actions">
                 <button className="btn-logout" onClick={handleLogout}>
