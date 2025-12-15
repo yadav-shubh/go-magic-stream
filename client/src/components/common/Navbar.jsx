@@ -29,7 +29,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <h1>Magic Stream</h1>
+                <a>Magic Stream</a>
             </div>
             <div className="navbar-actions">
                 <button className="btn-logout" onClick={handleLogout}>
