@@ -11,6 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.uber.org/zap"
 )
 
 type MovieService struct {
@@ -21,29 +23,57 @@ func NewMovieService(db *mongo.Database) *MovieService {
 	return &MovieService{db: db}
 }
 
-func (s *MovieService) GetMovies() ([]*models.MovieDTO, error) {
-	ctx := context.Background()
+func (s *MovieService) GetMovies(
+	ctx context.Context,
+	page int,
+	size int,
+	search string,
+	genre string,
+) ([]*models.MovieDTO, error) {
 
 	collection := s.db.Collection("movies")
-	cursor, err := collection.Find(ctx, bson.M{})
+
+	filter := bson.M{}
+	if search != "" {
+		filter["title"] = bson.M{
+			"$regex":   search,
+			"$options": "i",
+		}
+	}
+
+	if genre != "" {
+		filter["genre"] = genre
+	}
+
+	if page <= 0 {
+		page = 1
+	}
+	if size <= 0 {
+		size = 20
+	}
+
+	skip := int64((page - 1) * size)
+	limit := int64(size)
+
+	opts := options.Find().
+		SetSkip(skip).
+		SetLimit(limit).
+		SetSort(bson.D{{Key: "created_at", Value: -1}})
+
+	cursor, err := collection.Find(ctx, filter, opts)
 	if err != nil {
-		return nil, fmt.Errorf("error while getting all moview")
+		return nil, fmt.Errorf("error fetching movies: %w", err)
 	}
 	defer func(cursor *mongo.Cursor, ctx context.Context) {
-		_ = cursor.Close(ctx)
+		err := cursor.Close(ctx)
+		if err != nil {
+			utils.Log.Error("error closing cursor", zap.Error(err))
+		}
 	}(cursor, ctx)
 
 	var movies []*models.MovieDTO
-	for cursor.Next(ctx) {
-		var movie *models.MovieDTO
-		if err := cursor.Decode(&movie); err != nil {
-			continue
-		}
-		movies = append(movies, movie)
-	}
-
-	if err := cursor.Err(); err != nil {
-		return nil, fmt.Errorf("error while getting all moview")
+	if err := cursor.All(ctx, &movies); err != nil {
+		return nil, fmt.Errorf("error decoding movies: %w", err)
 	}
 
 	return movies, nil

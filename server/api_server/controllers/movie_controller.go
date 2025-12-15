@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yadav-shubh/go-magic-stream/models"
@@ -28,15 +29,22 @@ func (c *MovieController) RegisterRoutes(router *gin.Engine) {
 	}
 }
 
-func (c *MovieController) GetMovies(context *gin.Context) {
-	movies, err := c.movieService.GetMovies()
+func (c *MovieController) GetMovies(ctx *gin.Context) {
+	utils.Log.Info("GetMovies invoked")
+	// pagination (1 and 20 if not present), search and genre filter
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	size, _ := strconv.Atoi(ctx.DefaultQuery("size", "20"))
+	search := ctx.Query("search")
+	genre := ctx.Query("genre")
+
+	movies, err := c.movieService.GetMovies(ctx.Request.Context(), page, size, search, genre)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, utils.NewApiResponseNoData(err.Error(), http.StatusBadRequest))
+		ctx.JSON(http.StatusBadRequest, utils.NewApiResponseNoData(err.Error(), http.StatusBadRequest))
 		return
 	}
 	response := utils.NewApiResponse(movies, "Movie list", http.StatusOK)
-	context.JSON(http.StatusOK, response)
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (c *MovieController) FindMovieByImdbID(context *gin.Context) {
@@ -52,21 +60,21 @@ func (c *MovieController) FindMovieByImdbID(context *gin.Context) {
 	context.JSON(http.StatusOK, response)
 }
 
-func (c *MovieController) CreateMovie(context *gin.Context) {
+func (c *MovieController) CreateMovie(ctx *gin.Context) {
 	var movie models.MovieDTO
-	if err := context.ShouldBindJSON(&movie); err != nil {
-		context.JSON(http.StatusBadRequest, utils.NewApiResponseNoData(err.Error(), http.StatusBadRequest))
+	if err := ctx.ShouldBindJSON(&movie); err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.NewApiResponseNoData(err.Error(), http.StatusBadRequest))
 		return
 	} else if err := utils.GetValidator().Struct(&movie); err != nil {
-		context.JSON(http.StatusBadRequest, utils.NewApiResponseNoData("Validation failed", http.StatusBadRequest))
+		ctx.JSON(http.StatusBadRequest, utils.NewApiResponseNoData("Validation failed", http.StatusBadRequest))
 		return
 	}
 
 	response, err := c.movieService.CreateMovie(&movie)
 	if err != nil {
-		context.JSON(http.StatusBadRequest, utils.NewApiResponseNoData(err.Error(), http.StatusBadRequest))
+		ctx.JSON(http.StatusBadRequest, utils.NewApiResponseNoData(err.Error(), http.StatusBadRequest))
 		return
 	}
 
-	context.JSON(http.StatusOK, response)
+	ctx.JSON(http.StatusOK, response)
 }
