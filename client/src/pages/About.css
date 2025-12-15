@@ -1,0 +1,15 @@
+.hero-section {
+    background: radial-gradient(circle at center, #1a1a1a 0%, #3e3a3a 100%);
+    position: relative;
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+    text-align: center;
+    color: white;
+}
+
+.text-gradient-gold {
+    background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
