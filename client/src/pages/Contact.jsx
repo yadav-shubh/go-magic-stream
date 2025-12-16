@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axiosConfig from "../api/axiosConfig";
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import './Contact.css';
@@ -59,13 +60,20 @@ const Contact = () => {
 
         setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
+        try {
+            await axiosConfig.post('/contacts', formData);
+            // On success, show success message and clear form
             setSubmitSuccess(true);
             setFormData({ name: '', email: '', phone: '', query: '' });
             setTimeout(() => setSubmitSuccess(false), 5000); // Hide success message after 5s
-        }, 1500);
+        } catch (error) {
+            console.error("Error sending contact message", error);
+            // Optionally set a global error state here if UI supports it, 
+            // but for now we just log it and stop loading.
+            setErrors(prev => ({ ...prev, contact: "Failed to send message. Please try again later." }));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
