@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yadav-shubh/go-magic-stream/api_server/repository"
 	"github.com/yadav-shubh/go-magic-stream/models"
+	"github.com/yadav-shubh/go-magic-stream/repository"
 	"github.com/yadav-shubh/go-magic-stream/utils"
 	"go.uber.org/zap"
 )

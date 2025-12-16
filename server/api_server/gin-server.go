@@ -18,6 +18,7 @@ type GinServer struct {
 	movieController    *controllers.MovieController
 	authController     *controllers.AuthController
 	userSessionService *service.UserSessionService
+	contactController  *controllers.ContactController
 }
 
 func NewGinServer() *GinServer {
@@ -28,6 +29,7 @@ func NewGinServer() *GinServer {
 		movieController:    container.MovieController,
 		authController:     container.AuthController,
 		userSessionService: container.UserSessionService,
+		contactController:  container.ContactController,
 	}
 }
 
@@ -36,6 +38,8 @@ func (s *GinServer) GetHandler() http.Handler {
 	router.Use(gin.Recovery())
 	router.Use(middleware.CORSMiddleware())
 	router.Use(middleware.JWTAuth())
+	router.Use(middleware.RateLimit())
+	router.Use(middleware.SecurityHeaders())
 
 	s.RegisterRoutes(router)
 
@@ -45,4 +49,5 @@ func (s *GinServer) GetHandler() http.Handler {
 func (s *GinServer) RegisterRoutes(router *gin.Engine) {
 	s.movieController.RegisterRoutes(router)
 	s.authController.RegisterRoutes(router)
+	s.contactController.RegisterRoutes(router)
 }
