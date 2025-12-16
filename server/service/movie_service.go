@@ -42,7 +42,10 @@ func (s *MovieService) GetMovies(
 	}
 
 	if genre != "" {
-		filter["genre"] = genre
+		filter["genre.genre_name"] = bson.M{
+			"$regex":   genre,
+			"$options": "i",
+		}
 	}
 
 	if page <= 0 {
