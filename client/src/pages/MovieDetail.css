@@ -1,0 +1,174 @@
+/* MovieDetail.css */
+.detail-page {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.movie-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.back-btn {
+    background: transparent;
+    border: 1px solid #ced4da;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    transition: all 0.2s;
+    color: #495057;
+}
+
+.back-btn:hover {
+    background: #e9ecef;
+    color: #212529;
+}
+
+.detail-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Column */
+.detail-poster img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.trailer-container h3 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #374151;
+}
+
+.iframe-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #000;
+}
+
+.iframe-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Info Column */
+.movie-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: #111827;
+    line-height: 1.1;
+}
+
+.meta-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.detail-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.badge-excellent {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-okay {
+    background-color: #ffedd5;
+    color: #9a3412;
+}
+
+.badge-bad {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.detail-genres {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.detail-genre-tag {
+    background: #f3f4f6;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.review-section {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+    margin-bottom: 2rem;
+}
+
+.review-section h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #1e293b;
+}
+
+.review-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #334155;
+    font-style: italic;
+}
+
+.movie-info-raw {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.movie-info-raw .label {
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Dark Mode / Cinematic Feeling Tweaks (Optional overrides if dark theme is preferred globally) */
+/* Since Home.css has a light bg, we kept light here. If user wants cinematic dark, we can adjust. */
+/* But the header said "Netflix Redesign" earlier, so maybe dark is better? 
+   Let's stick to the current Home.css vibe which seemed to be light body with dark hero. 
+   Wait, Home.css line 3 is background-color: #f8f9fa; (Light).
+   So keeping light theme consistent. */
+
+@media (max-width: 768px) {
+    .detail-content {
+        grid-template-columns: 1fr;
+    }
+}

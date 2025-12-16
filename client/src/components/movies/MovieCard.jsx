@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import './MovieCard.css';
 
 const MovieCard = ({ movie }) => {
-    const { title, poster_path, ranking, genre } = movie;
+    const { title, poster_path, ranking, genre, imdb_id } = movie;
+    const navigate = useNavigate();
 
     // Determine badge color based on ranking value
     const getBadgeClass = (value) => {
@@ -11,7 +13,7 @@ const MovieCard = ({ movie }) => {
     };
 
     return (
-        <div className="movie-card">
+        <div className="movie-card" onClick={() => navigate(`/movie/${imdb_id}`)} style={{ cursor: 'pointer' }}>
             <div className="poster-wrapper">
                 <img src={poster_path} alt={title} loading="lazy" />
                 <div className="rating-badge">
